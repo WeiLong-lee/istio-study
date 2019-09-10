@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:8
 
 COPY target/lib/* /app/lib/
 COPY target/service-a-0.0.1-SNAPSHOT.jar /app/app.jar
