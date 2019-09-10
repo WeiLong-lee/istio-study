@@ -1,0 +1,6 @@
+
+server:
+  port: 28083
+
+app:
+  version: 1.0-local

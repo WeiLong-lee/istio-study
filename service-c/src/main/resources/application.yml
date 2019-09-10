@@ -1,0 +1,8 @@
+
+spring:
+  application:
+    name: service-c
+    rest:
+      base-path: /api
+  profiles:
+    active: local

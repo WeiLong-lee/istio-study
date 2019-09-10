@@ -1,0 +1,9 @@
+server:
+  port: 8081
+app:
+  version: 1.0
+
+service-b:
+  url: http://127.0.0.1:28082/api
+service-c:
+  url: http://127.0.0.1:28083/api

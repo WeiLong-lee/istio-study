@@ -1,0 +1,46 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-a-v1
+  labels:
+    app: service-a
+    version: "1.0"
+    visualize: "true"
+spec:
+  # 期望Pod对象副本数，超出会被控制器自动删除，不足时控制器会自动补足
+  replicas: 2
+# 当前控制器匹配 Pod 对象副本的标签选择器
+  selector:
+    matchLabels:
+      app: service-a
+      version: "1.0"
+      serving: "true"
+# 用于补足 Pod 副本数量时使用的 Pod 模板资源
+  template:
+    metadata:
+      labels:
+        app: service-a
+        serving: "true"
+        version: "1.0"
+        visualize: "true"
+    spec:
+      containers:
+      - name: service-a
+        image: istio-study/service-a-istio:1.0
+#       存活性检测
+        livenessProbe:
+#         存活性探测延迟时长，默认为0，即启动多久之后再开始第一次探测
+          initialDelaySeconds: 90
+          httpGet:
+            path: /actuator/health
+            port: 8080
+#       就绪性检测
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        ports:
+#        指定容器端口
+        - containerPort: 8080
+          name: http

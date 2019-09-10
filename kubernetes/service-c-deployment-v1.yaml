@@ -1,0 +1,39 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-c-v1
+  labels:
+    app: service-c
+    version: "1.0"
+    visualize: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: service-c
+      version: "1.0"
+      serving: "true"
+  template:
+    metadata:
+      labels:
+        app: service-c
+        serving: "true"
+        version: "1.0"
+        visualize: "true"
+    spec:
+      containers:
+      - name: service-c
+        image: istio-study/service-c-istio:1.0
+        livenessProbe:
+          initialDelaySeconds: 90
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        ports:
+        - containerPort: 8080
+          name: http
