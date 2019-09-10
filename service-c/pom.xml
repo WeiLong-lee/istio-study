@@ -54,29 +54,31 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>${start-class}</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-      </plugin>
+
       <plugin>
         <groupId>com.spotify</groupId>
-        <artifactId>dockerfile-maven-plugin</artifactId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>1.2.0</version>
+        <configuration>
+          <!-- docker私服的地址 -->
+          <!--<dockerHost>http://XXX.xxx.xxx.xxx:2375</dockerHost>-->
+          <!--镜像名称以及版本号-->
+          <imageName>${docker.image.prefix}/${project.artifactId}-istio</imageName>
+          <!-- 若需要重复构建相同标签名称的镜像，可将 forceTags 设置为 true -->
+          <forceTags>true</forceTags>
+          <!--Dockerfile的位置 -->
+          <dockerDirectory>${project.basedir}</dockerDirectory>
+          <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <directory>${project.build.directory}</directory>
+              <include>${project.build.finalName}.jar</include>
+            </resource>
+          </resources>
+        </configuration>
       </plugin>
-      <plugin>
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-      </plugin>
+
     </plugins>
   </build>
 
