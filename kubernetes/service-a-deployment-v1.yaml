@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: service-a
-        image: istio-study/service-a-istio:1.0
+        image: waylon/jiabao/service-a-istio:1.0
 #       存活性检测
         livenessProbe:
 #         存活性探测延迟时长，默认为0，即启动多久之后再开始第一次探测

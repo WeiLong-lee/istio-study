@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: service-c
-        image: istio-study/service-c-istio:1.0
+        image: waylon/jiabao/service-c-istio:1.0
         livenessProbe:
           initialDelaySeconds: 90
           httpGet:

@@ -17,7 +17,6 @@
 
   <properties>
     <start-class>com.istio.service.ServiceAApplication</start-class>
-    <docker.image.prefix>istio-study</docker.image.prefix>
   </properties>
   <dependencies>
     <dependency>
@@ -49,34 +48,37 @@
     </dependency>
   </dependencies>
 
+
   <build>
-    <finalName>service-a</finalName>
     <plugins>
+      <!--
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+      -->
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>${start-class}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>com.spotify</groupId>
         <artifactId>dockerfile-maven-plugin</artifactId>
-        <version>${dockerfile-maven-version}</version>
-        <configuration>
-          <repository>${docker.image.prefix}/${project.build.finalName}</repository>
-          <tag>latest</tag>
-          <buildArgs>
-            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-          </buildArgs>
-        </configuration>
-        <executions>
-          <execution>
-            <id>default</id>
-            <phase>package</phase>
-            <goals>
-              <goal>build</goal>
-              <goal>push</goal>
-            </goals>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

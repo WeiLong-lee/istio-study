@@ -1,9 +1,7 @@
-server:
-  port: 8081
 app:
   version: 1.0
 
 service-b:
-  url: http://127.0.0.1:28082/api
+  url: http://service-b:8080/api
 service-c:
-  url: http://127.0.0.1:28083/api
+  url: http://service-c:8080/api
