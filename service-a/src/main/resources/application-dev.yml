@@ -1,7 +1,0 @@
-app:
-  version: 1.0
-
-service-b:
-  url: http://service-b:8080/api
-service-c:
-  url: http://service-c:8080/api

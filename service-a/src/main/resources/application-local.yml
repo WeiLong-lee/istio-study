@@ -1,9 +1,0 @@
-server:
-  port: 28081
-app:
-  version: 1.0-local
-
-service-b:
-  url: http://127.0.0.1:28082/api
-service-c:
-  url: http://127.0.0.1:28083/api

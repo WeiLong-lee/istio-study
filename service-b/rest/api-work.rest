@@ -1,6 +1,0 @@
-
-### Get service info
-GET http://127.0.0.1:28082/api/info
-Accepts: application/json
-
-###
