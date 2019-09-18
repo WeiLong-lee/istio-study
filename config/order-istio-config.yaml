@@ -1,0 +1,84 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: order-vir-ser
+spec:
+  hosts:
+#    - order-service
+#    - order-service.default.svc.cluster.local
+#    - 192.168.99.100
+    - "*"
+  gateways:
+    - istio-default-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /order
+          headers:
+            version:
+              exact: v1
+      route:
+        - destination:
+            host: order-service.default.svc.cluster.local
+            port: 
+               number: 8081
+            subset: order-v1
+      fault:
+         delay:
+            percentage:
+               value: 10
+            fixedDelay: 1m
+    - match:
+        - uri:
+            prefix: /order
+          headers:
+            version:
+              exact: v2
+      route:
+        - destination:
+            host: order-service.default.svc.cluster.local
+            port: 
+               number: 8081
+            subset: order-v2
+      fault:
+         abort:
+            percentage:
+               value: 10
+            httpStatus: 400
+    - match:
+        - uri:
+            prefix: /order
+      route:
+        - destination:
+            host: order-service.default.svc.cluster.local
+            port: 
+               number: 8081
+            subset: order-v1
+          weight: 30
+        - destination:
+            host: order-service.default.svc.cluster.local
+            port: 
+               number: 8081
+            subset: order-v2
+          weight: 70
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: order-des-rule
+spec:
+  host: "order-service.default.svc.cluster.local"
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+    - name: order-v1
+      labels:
+        app: order
+        version: "v1"
+    - name: order-v2
+      labels:
+        app: order
+        version: "v2"
+

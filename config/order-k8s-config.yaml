@@ -1,0 +1,117 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: order-deployment-v1
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: order
+      version: "v1"
+  template:
+    metadata:
+      labels:
+        app: order
+        version: "v1"
+    spec:
+      containers:
+        - name: order-pod-v1
+          image: weilong1994/saas-order:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: order-port
+              containerPort: 8081
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config 
+                  key: POSTGRES_SERVICE
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: order-deployment-v2
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: order
+      version: "v2"
+  template:
+    metadata:
+      labels:
+        app: order
+        version: "v2"
+    spec:
+      containers:
+        - name: order-pod-v2
+          image: weilong1994/saas-order:2.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: order-port
+              containerPort: 8081
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config 
+                  key: POSTGRES_SERVICE
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+#  type: NodePort
+  ports:
+    - port: 8081
+      name: http
+#      targetPort: "order-port"
+  selector:
+    app: order
+
+
+

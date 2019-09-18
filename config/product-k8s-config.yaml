@@ -1,0 +1,120 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: product-deployment-v1
+spec:
+ # 期望Pod对象副本数，超出会被控制器自动删除，不足时控制器会自动补足
+  replicas: 1
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+# 当前控制器匹配 Pod 对象副本的标签选择器
+  selector:
+    matchLabels:
+      app: product
+      version: "v1"
+# 用于补足 Pod 副本数量时使用的 Pod 模板资源
+  template:
+    metadata:
+      labels:
+        app: product
+        version: "v1"
+    spec:
+      containers:
+        - name: product-pod-v1
+          image: weilong1994/saas-product:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: product-port
+              containerPort: 9001
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_SERVICE
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: product-deployment-v2
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: product
+      version: "v2"
+  template:
+    metadata:
+      labels:
+        app: product
+        version: "v2"
+    spec:
+      containers:
+        - name: product-pod-v2
+          image: weilong1994/saas-product:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: product-port
+              containerPort: 9001
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_SERVICE
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+#  type: NodePort
+  ports:
+    - port: 9001
+      name: http
+#      targetPort: "product-port"
+  selector:
+    app: product
+
