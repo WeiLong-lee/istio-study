@@ -1,0 +1,25 @@
+spring:
+   application:
+      name: Product
+   datasource:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://${POSTGRES_SERVICE}:5432/${POSTGRES_DB}?useSSL=false
+      username: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+   jpa:
+      hibernate:
+         dialect: org.hibernate.dialect.PostgreSQLDialect
+         ddl-auto: update
+      properties:
+         hibernate:
+            jdbc:
+               lob:
+                  non_contextual_creation: true
+   main:
+      allow-bean-definition-overriding: true
+server:
+   port: 9001
+   
+logging:
+   config: classpath:log4j2.xml
+   

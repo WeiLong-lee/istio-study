@@ -1,0 +1,29 @@
+spring:
+   application:
+      name: Order
+   datasource:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://127.0.0.1:5432/istio-test?useSSL=false
+      username: postgres
+      password: 123456
+   jpa:
+      hibernate:
+         dialect: org.hibernate.dialect.PostgreSQLDialect
+         ddl-auto: update
+      properties:
+         hibernate:
+            jdbc:
+               lob:
+                  non_contextual_creation: true
+   main:
+       allow-bean-definition-overriding: true
+server:
+   port: 8081
+   
+logging:
+  config: classpath:log4j2.xml
+
+product-service:
+          service:
+              host: 34.69.90.215
+              port: 80

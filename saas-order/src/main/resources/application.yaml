@@ -1,0 +1,47 @@
+
+############################# 访问路径、端口tomcat start ############################
+server:
+  port: 8081
+  servlet:
+    context-path: /order
+  tomcat:
+    max-threads: 1000
+    min-spare-threads: 30
+    uri-encoding: UTF-8
+############################# 访问路径、端口tomcat end ##############################
+
+################################ spring config start ###############################
+spring:
+  application:
+    name: saas-order
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  jackson:
+    date-format: yyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  banner:
+    charset: UTF-8
+    location: classpath:banner.txt
+# 当前项目maven激活环境，例如：local/dev/test，对应pom.xml中profile设置值
+---
+spring:
+  profiles:
+    active: '@profileActive@'
+############################### mybatis-plus start #################################
+mybatis-plus:
+  check-config-location: true
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: id_worker
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.example.istio.saas.order.entity
+################################ mybatis-plus end #################################
+            

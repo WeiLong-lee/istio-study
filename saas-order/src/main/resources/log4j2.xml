@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+    <Appenders>
+        <!--将日志在控制台输出-->
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <!--日志输出的格式-->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss:SSS} %p $r [%t] %C.%M(%L) | %m%n"/>
+        </Console>
+        
+     
+        <File name="fileAppender" fileName="logs/istio-example/saas-order.log">
+          <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss:SSS} %p $r [%t] %C.%M(%L) | %m%n"/>
+        </File>
+        
+    </Appenders>
+
+    <Loggers>
+
+        <Root level="info">
+            <appender-ref ref="console"/>
+            <appender-ref ref="fileAppender"/>
+        </Root>
+        <!-- For application define -->
+
+        <logger level="debug" name="com.example.istio.saas.order" additivity = "false">
+            <AppenderRef ref="console" />
+        </logger>
+    </Loggers>
+</Configuration>
